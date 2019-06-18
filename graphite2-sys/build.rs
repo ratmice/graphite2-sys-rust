@@ -105,6 +105,8 @@ fn build_static_lib() -> bool {
 
     // Pass along the header file directory.
     println!("cargo:include={}", install_dir.join("include").display());
+    println!("cargo:libdir={}", install_dir.join("lib").display());
+    println!("cargo:link=-l:libgraphite2.a");
 
     println!("[build.rs] Compiling done.");
     true
