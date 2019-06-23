@@ -131,6 +131,7 @@ fn use_installed() {
     // Run the command and check the status.
     let status = cmd.status().expect("[build.rs] Command failed to execute");
     if status.success() {
+        println!("cargo:link=-lgraphite2");
         println!("[build.rs] Command succeeded.");
     } else {
         match status.code() {
