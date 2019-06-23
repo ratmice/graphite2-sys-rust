@@ -7,7 +7,6 @@ extern crate pkg_config;
 extern crate vcpkg;
 
 fn main() {
-
     // 1. Use pkg-config to find a shared library. (feature = "pkg-config")
 
     // 2. Use vcpkg to find a shared or static library. (feature = "vcpkg")
@@ -15,7 +14,7 @@ fn main() {
     // 3. Build a static library. (feature = "static")
 
     if use_pkg_config() || use_vcpkg() || build_static_lib() {
-        return
+        return;
     }
 
     // 4. Use an installed shared library with no package manager. (no-default-features)
@@ -92,7 +91,10 @@ fn build_static_lib() -> bool {
     let install_dir = cfg.build();
 
     // Use the installation directory to find the library for linking.
-    println!("cargo:rustc-link-search=native={}", install_dir.join("lib").display());
+    println!(
+        "cargo:rustc-link-search=native={}",
+        install_dir.join("lib").display()
+    );
 
     // Link statically.
     println!("cargo:rustc-link-lib=static=graphite2");
@@ -125,7 +127,10 @@ fn use_installed() {
     let mut cmd = std::process::Command::new(cc::Build::new().get_compiler().path());
 
     // Link to some installed `graphite2` shared library and build a simple executable.
-    cmd.arg("-o").arg("/dev/null").arg("graphite2/tests/examples/simple.c").arg("-lgraphite2");
+    cmd.arg("-o")
+        .arg("/dev/null")
+        .arg("graphite2/tests/examples/simple.c")
+        .arg("-lgraphite2");
     println!("[build.rs] Command: {:?}", cmd);
 
     // Run the command and check the status.
@@ -136,7 +141,7 @@ fn use_installed() {
     } else {
         match status.code() {
             Some(code) => panic!("[build.rs] Command exited with status code: {}", code),
-            None       => panic!("[build.rs] Command terminated by signal.")
+            None => panic!("[build.rs] Command terminated by signal."),
         }
     }
 }
